@@ -110,7 +110,7 @@ export function ArchitecturalDrawing({
 
         const duration = durationMs !== undefined ? `${durationMs}ms` : "var(--duration-line)";
 
-        const children: ReactNode[] = layer.paths.map((path, i) => {
+        const children: ReactNode[] = layer.paths.flatMap((path, i) => {
           const hasDash = Boolean(path.dash);
           const revealFraction = mode === "reveal" ? (isVisible ? 1 : 0) : (layerProgress ?? 0);
 
@@ -132,10 +132,11 @@ export function ArchitecturalDrawing({
               };
 
           const key = pathKey(layer.id, path, i);
+          const elements: ReactNode[] = [];
 
           if (path.circle) {
             const [cx, cy, r] = path.circle;
-            return (
+            elements.push(
               <circle
                 key={key}
                 cx={cx}
@@ -146,12 +147,11 @@ export function ArchitecturalDrawing({
                 strokeWidth={strokeWidth}
                 strokeOpacity={baseOpacity}
                 style={style}
-              />
+              />,
             );
-          }
-          if (path.line) {
+          } else if (path.line) {
             const [x1, y1, x2, y2] = path.line;
-            return (
+            elements.push(
               <line
                 key={key}
                 x1={x1}
@@ -164,21 +164,60 @@ export function ArchitecturalDrawing({
                 strokeOpacity={baseOpacity}
                 strokeDasharray={hasDash ? path.dash : undefined}
                 style={style}
-              />
+              />,
+            );
+          } else if (path.d) {
+            // A wash additionally fills the closed shape with the layer's
+            // color at a soft, fixed alpha, fading in alongside the stroke
+            // (which still draws progressively like any other line) rather
+            // than appearing as a flat shape instantly.
+            const washStyle: CSSProperties = path.wash
+              ? {
+                  ...style,
+                  transition: `${style.transition}, fill-opacity ${duration} var(--ease-architectural) ${revealDelayMs}ms`,
+                }
+              : style;
+            elements.push(
+              <path
+                key={key}
+                d={path.d}
+                fill={path.wash ? color : "none"}
+                fillOpacity={path.wash ? revealFraction * 0.1 : undefined}
+                stroke={color}
+                strokeWidth={strokeWidth}
+                strokeOpacity={baseOpacity}
+                strokeDasharray={hasDash ? path.dash : undefined}
+                pathLength={hasDash ? undefined : 1}
+                style={washStyle}
+              />,
             );
           }
-          return (
-            <path
-              key={key}
-              d={path.d}
-              pathLength={hasDash ? undefined : 1}
-              stroke={color}
-              strokeWidth={strokeWidth}
-              strokeOpacity={baseOpacity}
-              strokeDasharray={hasDash ? path.dash : undefined}
-              style={style}
-            />
-          );
+
+          if (path.label) {
+            elements.push(
+              <text
+                key={`${key}-label`}
+                x={path.label.x}
+                y={path.label.y}
+                fill={color}
+                fillOpacity={baseOpacity}
+                fontSize={path.label.size ?? 9}
+                fontFamily="var(--font-body)"
+                textAnchor="middle"
+                style={{
+                  opacity: revealFraction,
+                  transition:
+                    mode === "reveal"
+                      ? `opacity ${duration} var(--ease-architectural) ${revealDelayMs}ms`
+                      : "opacity 160ms linear",
+                }}
+              >
+                {path.label.text}
+              </text>,
+            );
+          }
+
+          return elements;
         });
 
         return (

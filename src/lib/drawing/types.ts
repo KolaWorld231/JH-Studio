@@ -21,6 +21,14 @@ export type DrawingPath = {
   circle?: [number, number, number];
   /** Dash pattern for non-solid lines (e.g. dimension lines, circulation paths). */
   dash?: string;
+  /** Fills the shape (only meaningful for a closed `d`) with the role's
+   *  color at low alpha — the "watercolor wash" highlighting a single
+   *  volume/material, not a line technique. Use sparingly: one per scene. */
+  wash?: boolean;
+  /** A small technical annotation (dimension figure, angle degree, detail
+   *  tag number) drawn as real SVG text next to this path, in the same
+   *  fixed coordinate space. */
+  label?: { text: string; x: number; y: number; size?: number };
 };
 
 export type DrawingLayer = {
@@ -58,3 +66,62 @@ export const ROLE_STYLE: Record<
   // "confident" reads as precision, not boldness.
   accent: { order: 5, strokeWidth: 1.4, opacity: 0.9, useGold: true },
 };
+
+/**
+ * Generates a run of short parallel line segments inside a bounded strip —
+ * the construction-document cutaway hatch (see reference: a roof/wall
+ * section shown with diagonal fill lines). Deterministic, not random: given
+ * the same inputs it always produces the same lines.
+ */
+export function hatchLines(
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  spacing = 10,
+  angleDeg = 45,
+): DrawingPath[] {
+  const angle = (angleDeg * Math.PI) / 180;
+  const dx = Math.cos(angle);
+  const dy = Math.sin(angle);
+  const diag = Math.hypot(width, height) + spacing;
+  const paths: DrawingPath[] = [];
+  for (let offset = -diag; offset <= diag; offset += spacing) {
+    // Line through a point offset along the hatch normal, clipped to the box.
+    const nx = -dy;
+    const ny = dx;
+    const cx = x + width / 2 + nx * offset;
+    const cy = y + height / 2 + ny * offset;
+    const x1 = cx - dx * diag;
+    const y1 = cy - dy * diag;
+    const x2 = cx + dx * diag;
+    const y2 = cy + dy * diag;
+    // Clip to the box via simple parametric intersection against the rect
+    // edges would be more precise, but for a decorative accent a generous
+    // overdraw clipped by an SVG clipPath (applied by the caller) is
+    // simpler and just as correct visually.
+    paths.push({ line: [x1, y1, x2, y2] });
+  }
+  return paths;
+}
+
+/**
+ * A short arc matching a drafting angle callout, with its degree figure
+ * attached as the arc's own label (rendered next to the arc, not on it).
+ */
+export function angleMark(cx: number, cy: number, radius: number, startDeg: number, endDeg: number): DrawingPath {
+  const start = (startDeg * Math.PI) / 180;
+  const end = (endDeg * Math.PI) / 180;
+  const x1 = cx + radius * Math.cos(start);
+  const y1 = cy + radius * Math.sin(start);
+  const x2 = cx + radius * Math.cos(end);
+  const y2 = cy + radius * Math.sin(end);
+  const large = endDeg - startDeg > 180 ? 1 : 0;
+  const mid = (startDeg + endDeg) / 2;
+  const labelX = cx + (radius + 12) * Math.cos((mid * Math.PI) / 180);
+  const labelY = cy + (radius + 12) * Math.sin((mid * Math.PI) / 180);
+  return {
+    d: `M ${x1} ${y1} A ${radius} ${radius} 0 ${large} 1 ${x2} ${y2}`,
+    label: { text: `${endDeg - startDeg}°`, x: labelX, y: labelY, size: 9 },
+  };
+}

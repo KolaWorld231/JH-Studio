@@ -1,4 +1,4 @@
-import type { DrawingLayer, DrawingScene } from "./types";
+import { angleMark, type DrawingLayer, type DrawingScene } from "./types";
 
 /** Standard 5x5 alignment grid shared by every full-size scene. */
 function gridAxis(id = "grid"): DrawingLayer {
@@ -108,14 +108,38 @@ export const kaHeroScene: DrawingScene = {
       paths: [{ d: "M120 360 L520 360 L520 200" }],
       delayMs: 560,
     },
-    dimensionTicks("dim-ticks", [
-      [110, 160, 130, 160],
-      [110, 360, 130, 360],
-    ]),
+    // A single soft gold wash on the elevation's near face — the one
+    // "watercolor highlight" per scene, not a repeated treatment.
+    {
+      id: "elevation-wash",
+      role: "accent",
+      paths: [{ d: "M160 110 L160 60 L300 40 L300 110 Z", wash: true }],
+      delayMs: 40,
+    },
+    {
+      id: "dim-ticks",
+      role: "annotation",
+      paths: [
+        { line: [110, 160, 130, 160], label: { text: "6.0 M", x: 84, y: 164 } },
+        { line: [110, 360, 130, 360] },
+      ],
+    },
+    // One drafting angle callout at the roof ridge — restrained to a
+    // single annotation, matching a construction-document detail rather
+    // than covering the drawing in callouts.
+    {
+      id: "ridge-angle",
+      role: "annotation",
+      paths: [angleMark(300, 40, 26, 10, 170)],
+      delayMs: 200,
+    },
     {
       id: "ref-points",
       role: "accent",
-      paths: [{ circle: [120, 160, 3] }, { circle: [300, 300, 2.5] }],
+      paths: [
+        { circle: [120, 160, 3], label: { text: "01", x: 120, y: 144 } },
+        { circle: [300, 300, 2.5], label: { text: "A", x: 300, y: 286 } },
+      ],
       delayMs: 640,
     },
   ],
