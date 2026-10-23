@@ -31,9 +31,16 @@ export default function ProcessPage() {
           </p>
           <ul className="mt-8 space-y-3">
             {principles.map((principle) => (
-              <li key={principle.id} className="flex items-baseline gap-3 text-sm">
-                <span className="font-display text-[var(--color-gold-dim)]">{principle.index}</span>
-                <span className="text-[var(--color-ink)]">{principle.title}</span>
+              <li key={principle.id}>
+                <Link
+                  href={`/knitted-architecture/philosophy#${principle.id}`}
+                  className="group flex items-baseline gap-3 text-sm"
+                >
+                  <span className="font-display text-[var(--color-gold-dim)]">{principle.index}</span>
+                  <span className="text-[var(--color-ink)] group-hover:text-[var(--color-gold-dim)] transition-colors">
+                    {principle.title}
+                  </span>
+                </Link>
               </li>
             ))}
           </ul>

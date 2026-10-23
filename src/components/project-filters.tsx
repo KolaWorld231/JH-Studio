@@ -29,16 +29,15 @@ export function ProjectFilters({ projects }: { projects: Project[] }) {
   return (
     <div>
       <div
-        role="tablist"
+        role="group"
         aria-label="Filter projects by status"
         className="flex flex-wrap gap-2 border-b border-[var(--color-border)] pb-6"
       >
         {options.map((option) => (
           <button
             key={option.value}
-            role="tab"
             type="button"
-            aria-selected={filter === option.value}
+            aria-pressed={filter === option.value}
             onClick={() => setFilter(option.value)}
             className={`px-4 py-2 text-sm transition-colors ${
               filter === option.value
@@ -50,6 +49,12 @@ export function ProjectFilters({ projects }: { projects: Project[] }) {
           </button>
         ))}
       </div>
+
+      <p className="sr-only" role="status" aria-live="polite">
+        {filtered.length === 0
+          ? "No projects to show for this filter."
+          : `Showing ${filtered.length} project${filtered.length === 1 ? "" : "s"}.`}
+      </p>
 
       {filtered.length === 0 ? (
         <div className="mt-10">

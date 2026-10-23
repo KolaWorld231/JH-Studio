@@ -68,12 +68,14 @@ export default function HomePage() {
                   href={divisions.knittedArchitecture.href}
                   className="group relative flex h-full flex-col justify-between overflow-hidden border border-[var(--color-border)] bg-[var(--color-paper)] p-8 md:p-10 transition-colors hover:border-[var(--color-gold)]"
                 >
-                  <div className="absolute inset-0 opacity-[0.35] pointer-events-none">
+                  <div className="absolute inset-0 opacity-[0.35] pointer-events-none" aria-hidden="true">
                     <ArchitecturalLines variant="panel" className="w-full h-full" />
                   </div>
                   <div className="relative">
                     <p className="text-xs uppercase tracking-[0.14em] text-[var(--color-gold-dim)]">
-                      Available now
+                      {divisions.knittedArchitecture.status === "available"
+                        ? "Available now"
+                        : "Coming Soon"}
                     </p>
                     <h3 className="mt-3 font-display text-2xl md:text-3xl text-[var(--color-ink)]">
                       {divisions.knittedArchitecture.name}
@@ -99,12 +101,14 @@ export default function HomePage() {
                   href={divisions.realEstateDevelopment.href}
                   className="group relative flex h-full flex-col justify-between overflow-hidden border border-[var(--color-border)] bg-[var(--color-night)] text-[var(--color-night-ink)] p-8 md:p-10 transition-colors hover:border-[var(--color-gold)]"
                 >
-                  <div className="absolute inset-0 opacity-[0.25] pointer-events-none">
+                  <div className="absolute inset-0 opacity-[0.25] pointer-events-none" aria-hidden="true">
                     <ArchitecturalLines variant="panel" tone="paper" className="w-full h-full" />
                   </div>
                   <div className="relative">
                     <p className="text-xs uppercase tracking-[0.14em] text-[var(--color-gold)]">
-                      Coming Soon
+                      {divisions.realEstateDevelopment.status === "available"
+                        ? "Available now"
+                        : "Coming Soon"}
                     </p>
                     <h3 className="mt-3 font-display text-2xl md:text-3xl">
                       {divisions.realEstateDevelopment.name}

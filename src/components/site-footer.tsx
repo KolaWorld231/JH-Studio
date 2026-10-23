@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { Logo } from "@/components/logo";
 import { contactDetails, siteContent, socialLinks } from "@/lib/content/site";
 import { footerDivisionLinks } from "@/lib/content/nav";
 
@@ -14,18 +14,7 @@ export function SiteFooter() {
       <div className="container-edge py-16 md:py-20">
         <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr_1fr_1fr] gap-12 md:gap-8">
           <div>
-            <Link href="/" className="flex items-center gap-2.5 w-fit" aria-label="JH Studio — home">
-              <Image
-                src="/brand/jh-studio-mark-dark.jpg"
-                alt="JH Studio knitted mark"
-                width={30}
-                height={30}
-                className="rounded-[2px]"
-              />
-              <span className="font-display text-[1.05rem]">
-                <span style={{ color: "var(--color-gold)" }}>JH</span> Studio
-              </span>
-            </Link>
+            <Logo tone="paper" />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-[var(--color-night-muted)]">
               {siteContent.heroLine}
             </p>

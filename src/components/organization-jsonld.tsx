@@ -34,10 +34,10 @@ export function OrganizationJsonLd() {
   }
   if (sameAs.length > 0) data.sameAs = sameAs;
 
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
-    />
-  );
+  // Escape "<" so a value containing "</script>" can't break out of the
+  // tag — defense in depth; all fields here come from our own trusted
+  // content module, but this keeps it safe if that ever changes.
+  const json = JSON.stringify(data).replace(/</g, "\\u003c");
+
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: json }} />;
 }

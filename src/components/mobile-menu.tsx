@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 const links = [
@@ -11,10 +11,38 @@ const links = [
 
 export function MobileMenu() {
   const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  function close() {
+    setOpen(false);
+    buttonRef.current?.focus();
+  }
+
+  useEffect(() => {
+    if (!open) return;
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") close();
+    }
+    function onPointerDown(event: PointerEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("pointerdown", onPointerDown);
+    };
+  }, [open]);
 
   return (
-    <div className="md:hidden">
+    <div className="md:hidden" ref={containerRef}>
       <button
+        ref={buttonRef}
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
@@ -38,16 +66,12 @@ export function MobileMenu() {
         <nav
           id="mobile-menu"
           aria-label="Mobile"
-          className="absolute left-0 right-0 top-[72px] border-b border-[var(--color-border)] bg-[var(--color-paper)] px-5 py-6"
+          className="fixed left-0 right-0 top-[72px] border-b border-[var(--color-border)] bg-[var(--color-paper)] px-5 py-6"
         >
           <ul className="flex flex-col gap-4 text-base">
             {links.map((link) => (
               <li key={link.href}>
-                <Link
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="text-[var(--color-ink)]"
-                >
+                <Link href={link.href} onClick={close} className="text-[var(--color-ink)]">
                   {link.label}
                 </Link>
               </li>

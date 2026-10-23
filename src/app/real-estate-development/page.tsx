@@ -20,7 +20,8 @@ export default function RealEstateDevelopmentPage() {
         <div className="container-edge py-20 md:py-32 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <Reveal>
             <p className="text-xs uppercase tracking-[0.16em] text-[var(--color-gold)]">
-              {division.name} · Coming Soon
+              {division.name}
+              {division.status === "coming-soon" ? " · Coming Soon" : ""}
             </p>
             <h1 className="mt-4 font-display text-4xl md:text-5xl leading-[1.08]">
               {division.tagline}

@@ -16,21 +16,31 @@ export const siteContent = {
     "JH Studio practices Knitted Architecture — an approach that intentionally weaves people, spaces, nature, culture, and movement into cohesive environments. Buildings are considered social and spatial ecosystems that encourage interaction, strengthen communities, and create meaningful connections between people and their surroundings.",
 } as const;
 
-export const divisions = {
+export type DivisionStatus = "available" | "coming-soon";
+
+export type Division = {
+  name: string;
+  href: string;
+  tagline: string;
+  description: string;
+  status: DivisionStatus;
+};
+
+export const divisions: { knittedArchitecture: Division; realEstateDevelopment: Division } = {
   knittedArchitecture: {
     name: "Knitted Architecture",
     href: "/knitted-architecture",
     tagline: "Architecture that connects.",
     description:
       "Architectural design shaped by people, place, and nature.",
-    status: "available" as const,
+    status: "available",
   },
   realEstateDevelopment: {
     name: "Real Estate Development",
     href: "/real-estate-development",
     tagline: "Places of lasting value.",
     description: "Transforming ideas into places of lasting value.",
-    status: "coming-soon" as const,
+    status: "coming-soon",
   },
 };
 
