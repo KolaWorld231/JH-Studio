@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ArchitecturalLines } from "@/components/architectural-lines";
+import { ArchitecturalDrawing } from "@/components/drawing/architectural-drawing";
+import { kaHeroScene } from "@/lib/drawing/scenes";
 import { Reveal } from "@/components/reveal";
 import { PrincipleCardLink } from "@/components/principle-card-link";
 import { siteContent } from "@/lib/content/site";
@@ -47,8 +48,14 @@ export default function KnittedArchitecturePage() {
               </Link>
             </div>
           </Reveal>
-          <div className="relative aspect-[4/3] w-full" aria-hidden="true">
-            <ArchitecturalLines className="w-full h-full" />
+          <div className="relative aspect-[4/3] w-full">
+            <ArchitecturalDrawing
+              scene={kaHeroScene}
+              mode="progress"
+              interactive
+              showCaption
+              className="w-full h-full"
+            />
           </div>
         </div>
       </section>

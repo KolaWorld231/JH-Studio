@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/page-hero";
 import { Reveal } from "@/components/reveal";
 import { EmptyState } from "@/components/empty-state";
+import { ArchitecturalDrawing } from "@/components/drawing/architectural-drawing";
+import { contactScene } from "@/lib/drawing/scenes";
 import { contactDetails } from "@/lib/content/site";
 
 export const metadata: Metadata = {
@@ -79,6 +81,12 @@ export default function ContactPage() {
           </Reveal>
         ) : null}
       </section>
+
+      <div className="container-edge pb-16 md:pb-20">
+        <div className="relative aspect-[3/1] w-full max-w-2xl mx-auto opacity-80">
+          <ArchitecturalDrawing scene={contactScene} />
+        </div>
+      </div>
     </>
   );
 }

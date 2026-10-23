@@ -10,6 +10,7 @@ import {
 import { Reveal } from "@/components/reveal";
 import { ProjectCard } from "@/components/project-card";
 import { BlueprintToBuilding } from "@/components/blueprint-to-building";
+import { GalleryImageReveal } from "@/components/drawing/gallery-image-reveal";
 
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
@@ -133,15 +134,7 @@ export default async function ProjectDetailPage({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {project.gallery.map((image, i) => (
               <Reveal key={image.src} delayMs={i * 60}>
-                <div className="relative aspect-[4/3] bg-[var(--color-surface)]">
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    fill
-                    sizes="(min-width: 768px) 50vw, 100vw"
-                    className="object-cover"
-                  />
-                </div>
+                <GalleryImageReveal src={image.src} alt={image.alt} sizes="(min-width: 768px) 50vw, 100vw" />
                 {image.caption ? (
                   <p className="mt-2 text-sm text-[var(--color-muted)]">{image.caption}</p>
                 ) : null}

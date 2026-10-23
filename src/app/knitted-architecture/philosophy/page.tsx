@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/page-hero";
 import { Reveal } from "@/components/reveal";
 import { ArchitecturalLines } from "@/components/architectural-lines";
+import { PrincipleRow } from "@/components/principle-row";
 import { siteContent } from "@/lib/content/site";
 import { principles } from "@/lib/content/principles";
+import { principleScenes } from "@/lib/drawing/scenes";
 
 export const metadata: Metadata = {
   title: "Philosophy",
@@ -44,25 +46,12 @@ export default function PhilosophyPage() {
 
           <ol className="mt-10 space-y-10">
             {principles.map((principle, i) => (
-              <Reveal
+              <PrincipleRow
                 key={principle.id}
-                as="li"
+                principle={principle}
+                scene={principleScenes[principle.id]}
                 delayMs={i * 70}
-                id={principle.id}
-                className="grid grid-cols-[auto_1fr] gap-6 md:gap-10 border-t border-[var(--color-border)] pt-8 scroll-mt-28"
-              >
-                <span className="font-display text-4xl md:text-5xl text-[var(--color-gold)] leading-none">
-                  {principle.index}
-                </span>
-                <div>
-                  <h2 className="font-display text-2xl md:text-3xl text-[var(--color-ink)]">
-                    {principle.title}
-                  </h2>
-                  <p className="mt-3 max-w-2xl text-base leading-relaxed text-[var(--color-ink-soft)]">
-                    {principle.description}
-                  </p>
-                </div>
-              </Reveal>
+              />
             ))}
           </ol>
         </div>

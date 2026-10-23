@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArchitecturalDrawing } from "@/components/drawing/architectural-drawing";
+import { cardAccentScene } from "@/lib/drawing/scenes";
 import type { Project } from "@/lib/content/projects";
 import { projectStatusLabels } from "@/lib/content/projects";
 
@@ -41,6 +43,15 @@ export function ProjectCard({ project, priority = false, size = "standard" }: Pr
             Image pending
           </div>
         )}
+        {/* Decorative corner accent, not part of any real project drawing —
+            a quiet hover/focus affordance, independent of whether a cover
+            image is present. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-0 right-0 w-12 h-12 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+        >
+          <ArchitecturalDrawing scene={cardAccentScene} viewBox="0 0 48 48" />
+        </div>
       </div>
       <div className={isFeature ? "p-6 md:p-8" : "p-5"}>
         <div className="flex items-center justify-between gap-3">
