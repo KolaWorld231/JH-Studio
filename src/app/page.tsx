@@ -48,41 +48,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* About / purpose */}
-        <section id="about" className="container-edge py-20 md:py-28">
-          <Reveal className="max-w-3xl">
-            <p className="text-xs uppercase tracking-[0.16em] text-[var(--color-gold-dim)]">
-              Our Purpose
-            </p>
-            <h2 className="mt-3 font-display text-3xl md:text-4xl text-[var(--color-ink)]">
-              {siteContent.coreIdea}
-            </h2>
-            <p className="mt-6 text-base md:text-lg leading-relaxed text-[var(--color-ink-soft)]">
-              {siteContent.practiceStatement}
-            </p>
-          </Reveal>
-
-          <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-10">
-            <Reveal delayMs={80} className="border-t border-[var(--color-border)] pt-6">
-              <h3 className="text-sm uppercase tracking-[0.12em] text-[var(--color-muted)]">
-                Vision
-              </h3>
-              <p className="mt-3 leading-relaxed text-[var(--color-ink-soft)]">
-                {siteContent.vision}
-              </p>
-            </Reveal>
-            <Reveal delayMs={160} className="border-t border-[var(--color-border)] pt-6">
-              <h3 className="text-sm uppercase tracking-[0.12em] text-[var(--color-muted)]">
-                Mission
-              </h3>
-              <p className="mt-3 leading-relaxed text-[var(--color-ink-soft)]">
-                {siteContent.mission}
-              </p>
-            </Reveal>
-          </div>
-        </section>
-
-        {/* Division selector */}
+        {/* Division selector — follows the hero sequence directly, per the
+            brief: "the drawing settles; the visitor can immediately choose
+            Knitted Architecture or Real Estate Development." */}
         <section className="bg-[var(--color-surface)] border-y border-[var(--color-border)]">
           <div className="container-edge py-20 md:py-28">
             <Reveal className="max-w-2xl">
@@ -157,6 +125,40 @@ export default function HomePage() {
                 </Link>
               </Reveal>
             </div>
+          </div>
+        </section>
+
+        {/* About / purpose — supporting context below the central decision */}
+        <section id="about" className="container-edge py-20 md:py-28">
+          <Reveal className="max-w-3xl">
+            <p className="text-xs uppercase tracking-[0.16em] text-[var(--color-gold-dim)]">
+              Our Purpose
+            </p>
+            <h2 className="mt-3 font-display text-3xl md:text-4xl text-[var(--color-ink)]">
+              {siteContent.coreIdea}
+            </h2>
+            <p className="mt-6 text-base md:text-lg leading-relaxed text-[var(--color-ink-soft)]">
+              {siteContent.practiceStatement}
+            </p>
+          </Reveal>
+
+          <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-10">
+            <Reveal delayMs={80} className="border-t border-[var(--color-border)] pt-6">
+              <h3 className="text-sm uppercase tracking-[0.12em] text-[var(--color-muted)]">
+                Vision
+              </h3>
+              <p className="mt-3 leading-relaxed text-[var(--color-ink-soft)]">
+                {siteContent.vision}
+              </p>
+            </Reveal>
+            <Reveal delayMs={160} className="border-t border-[var(--color-border)] pt-6">
+              <h3 className="text-sm uppercase tracking-[0.12em] text-[var(--color-muted)]">
+                Mission
+              </h3>
+              <p className="mt-3 leading-relaxed text-[var(--color-ink-soft)]">
+                {siteContent.mission}
+              </p>
+            </Reveal>
           </div>
         </section>
       </main>
