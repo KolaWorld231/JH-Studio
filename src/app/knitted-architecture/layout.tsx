@@ -6,7 +6,7 @@ export default function KnittedArchitectureLayout({ children }: LayoutProps<"/kn
     <>
       <SiteHeader divisionLabel="Knitted Architecture" />
       <KaNav />
-      <main>{children}</main>
+      <main id="main-content">{children}</main>
     </>
   );
 }

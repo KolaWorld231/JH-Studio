@@ -13,7 +13,7 @@ export default function HomePage() {
   return (
     <>
       <SiteHeader />
-      <main>
+      <main id="main-content">
         {/* Hero */}
         <section className="relative overflow-hidden border-b border-[var(--color-border)]">
           <div className="container-edge grid grid-cols-1 lg:grid-cols-2 gap-10 items-center py-16 md:py-28">
