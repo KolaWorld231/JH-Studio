@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ArchitecturalLines } from "@/components/architectural-lines";
 import { Reveal } from "@/components/reveal";
+import { PrincipleCardLink } from "@/components/principle-card-link";
 import { siteContent } from "@/lib/content/site";
 import { principles } from "@/lib/content/principles";
 import { projects } from "@/lib/content/projects";
@@ -65,15 +66,7 @@ export default function KnittedArchitecturePage() {
 
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-px bg-[var(--color-border)] border border-[var(--color-border)]">
           {principles.map((principle, i) => (
-            <Reveal key={principle.id} delayMs={i * 60} className="bg-[var(--color-paper)] p-6">
-              <span className="font-display text-2xl text-[var(--color-gold-dim)]">
-                {principle.index}
-              </span>
-              <h3 className="mt-3 font-display text-lg text-[var(--color-ink)]">{principle.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">
-                {principle.description}
-              </p>
-            </Reveal>
+            <PrincipleCardLink key={principle.id} principle={principle} delayMs={i * 60} />
           ))}
         </div>
 

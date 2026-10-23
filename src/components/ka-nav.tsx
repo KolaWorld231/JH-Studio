@@ -10,7 +10,7 @@ export function KaNav() {
   return (
     <nav
       aria-label="Knitted Architecture"
-      className="border-b border-[var(--color-border)] bg-[var(--color-paper)]"
+      className="relative border-b border-[var(--color-border)] bg-[var(--color-paper)]"
     >
       <div className="container-edge flex items-center gap-1 overflow-x-auto text-sm">
         {kaNavLinks.map((link) => {
@@ -37,6 +37,11 @@ export function KaNav() {
           );
         })}
       </div>
+      {/* Scroll affordance: hints there's more nav off-screen on narrow viewports. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-[var(--color-paper)] to-transparent sm:hidden"
+      />
     </nav>
   );
 }

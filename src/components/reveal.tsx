@@ -1,16 +1,26 @@
 "use client";
 
-import type { ElementType, ReactNode } from "react";
+import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
 import { useReveal } from "@/lib/hooks/use-reveal";
 
-type RevealProps = {
+type RevealOwnProps<T extends ElementType> = {
   children: ReactNode;
-  as?: ElementType;
+  as?: T;
   className?: string;
   delayMs?: number;
 };
 
-export function Reveal({ children, as: Tag = "div", className = "", delayMs = 0 }: RevealProps) {
+type RevealProps<T extends ElementType> = RevealOwnProps<T> &
+  Omit<ComponentPropsWithoutRef<T>, keyof RevealOwnProps<T>>;
+
+export function Reveal<T extends ElementType = "div">({
+  children,
+  as,
+  className = "",
+  delayMs = 0,
+  ...rest
+}: RevealProps<T>) {
+  const Tag = (as ?? "div") as ElementType;
   const { ref, isVisible } = useReveal<HTMLElement>(0.15);
 
   return (
@@ -18,6 +28,7 @@ export function Reveal({ children, as: Tag = "div", className = "", delayMs = 0 
       ref={ref as never}
       className={`fade-rise ${isVisible ? "is-visible" : ""} ${className}`}
       style={{ transitionDelay: `${delayMs}ms` }}
+      {...rest}
     >
       {children}
     </Tag>
