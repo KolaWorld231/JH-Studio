@@ -21,6 +21,21 @@ export type Project = {
   designPrinciples?: string[];
   gallery?: ProjectImage[];
   relatedSlugs?: string[];
+  /**
+   * The signature "blueprint-to-building" sequence from
+   * docs/PREMIUM_VISUAL_DIRECTION.md §5: a real plan/elevation that
+   * transitions into its corresponding rendering or photograph. Only set
+   * this when `drawing` and `rendering` are verified to depict the same
+   * project — an explicit pair here, never auto-matched from `gallery` by
+   * `kind`, so we never imply an unrelated image is the built result of a
+   * plan. Leave it unset (the common case) and the project page simply
+   * doesn't render the sequence, per "if no matching final visual exists,
+   * do not fabricate one."
+   */
+  blueprintToBuilding?: {
+    drawing: ProjectImage;
+    rendering: ProjectImage;
+  };
 };
 
 export const projectStatusLabels: Record<ProjectStatus, string> = {

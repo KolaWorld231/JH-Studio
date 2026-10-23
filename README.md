@@ -46,7 +46,12 @@ No real project or team content was supplied with the brief, so:
 - `src/lib/content/projects.ts` exports an empty `projects` array. The
   portfolio index, filters, and `[slug]` detail template are fully built
   and data-driven — add approved projects to this array (matching the
-  `Project` type) and they'll appear everywhere automatically.
+  `Project` type) and they'll appear everywhere automatically. A project
+  can also set `blueprintToBuilding: { drawing, rendering }` to get the
+  signature plan-to-photo crossfade sequence (`src/components/
+  blueprint-to-building.tsx`) on its detail page — only set this when the
+  two images are verified to depict the same project; it's never inferred
+  automatically from the gallery.
 - `src/lib/content/team.ts` exports an empty `team` array for the same
   reason. The Studio page renders a deliberate empty state instead of
   fabricated profiles.

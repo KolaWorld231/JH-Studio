@@ -19,7 +19,7 @@ function getServerSnapshot() {
 }
 
 /** Hydration-safe read of prefers-reduced-motion (false during SSR/first paint). */
-function usePrefersReducedMotion() {
+export function usePrefersReducedMotion() {
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }
 

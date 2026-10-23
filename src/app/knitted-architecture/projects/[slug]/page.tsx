@@ -9,6 +9,7 @@ import {
 } from "@/lib/content/projects";
 import { Reveal } from "@/components/reveal";
 import { ProjectCard } from "@/components/project-card";
+import { BlueprintToBuilding } from "@/components/blueprint-to-building";
 
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
@@ -73,7 +74,19 @@ export default async function ProjectDetailPage({
         </Reveal>
       </div>
 
-      {project.coverImage ? (
+      {project.blueprintToBuilding ? (
+        <div className="container-edge py-10 md:py-14">
+          <Reveal className="mb-4 block">
+            <p className="text-xs uppercase tracking-[0.14em] text-[var(--color-gold-dim)]">
+              Blueprint to Building
+            </p>
+          </Reveal>
+          <BlueprintToBuilding
+            drawing={project.blueprintToBuilding.drawing}
+            rendering={project.blueprintToBuilding.rendering}
+          />
+        </div>
+      ) : project.coverImage ? (
         <div className="container-edge py-10 md:py-14">
           <div className="relative aspect-[16/9] w-full bg-[var(--color-surface)]">
             <Image
