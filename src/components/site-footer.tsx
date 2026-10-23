@@ -26,11 +26,6 @@ export function SiteFooter() {
             </h2>
             <ul className="mt-4 space-y-2.5 text-sm">
               <li>
-                <Link href="/#about" className="hover:text-[var(--color-gold)] transition-colors">
-                  Our Purpose
-                </Link>
-              </li>
-              <li>
                 <Link
                   href="/knitted-architecture/studio"
                   className="hover:text-[var(--color-gold)] transition-colors"
@@ -113,7 +108,26 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-[var(--color-night-border)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[var(--color-night-muted)]">
+        <div className="mt-16 pt-10 border-t border-[var(--color-night-border)] grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h2 className="text-xs uppercase tracking-[0.14em] text-[var(--color-night-muted)]">
+              Vision
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-[var(--color-night-muted)]">
+              {siteContent.vision}
+            </p>
+          </div>
+          <div>
+            <h2 className="text-xs uppercase tracking-[0.14em] text-[var(--color-night-muted)]">
+              Mission
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-[var(--color-night-muted)]">
+              {siteContent.mission}
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-10 pt-8 border-t border-[var(--color-night-border)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[var(--color-night-muted)]">
           <p>© {year} JH Studio Design & Development. All rights reserved.</p>
           <p className="italic">{siteContent.tagline}</p>
         </div>

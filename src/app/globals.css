@@ -145,6 +145,28 @@ body {
   }
 }
 
+/* A slightly more deliberate entrance for the division-selector cards —
+   a soft scale alongside the rise, reserved for that one cinematic
+   decision point rather than used throughout the site. */
+.cinematic-rise {
+  opacity: 0;
+  transform: translateY(22px) scale(0.985);
+  transition: opacity 900ms var(--ease-architectural), transform 900ms var(--ease-architectural);
+}
+
+.cinematic-rise.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-rise {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 .container-edge {
   width: 100%;
   max-width: var(--container-max);
