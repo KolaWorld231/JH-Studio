@@ -18,13 +18,33 @@ const inter = Inter({
   display: "swap",
 });
 
+const title = {
+  default: "JH Studio Design & Development",
+  template: "%s — JH Studio",
+};
+const description =
+  "JH Studio Design & Development designs and develops places that bring people, spaces, and nature together. Explore Knitted Architecture and Real Estate Development.";
+
+// Set once the site has a real production domain; Next falls back to
+// localhost for local/preview builds in the meantime.
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+
 export const metadata: Metadata = {
-  title: {
-    default: "JH Studio Design & Development",
-    template: "%s — JH Studio",
+  ...(siteUrl ? { metadataBase: new URL(siteUrl) } : {}),
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    siteName: "JH Studio Design & Development",
+    type: "website",
+    locale: "en_US",
   },
-  description:
-    "JH Studio Design & Development designs and develops places that bring people, spaces, and nature together. Explore Knitted Architecture and Real Estate Development.",
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
