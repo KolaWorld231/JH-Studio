@@ -59,10 +59,24 @@ export function ProjectFilters({ projects }: { projects: Project[] }) {
           />
         </div>
       ) : (
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((project, i) => (
-            <ProjectCard key={project.slug} project={project} priority={i < 3} />
-          ))}
+        // Asymmetric editorial grid (docs/DESIGN_SYSTEM.md, PREMIUM_VISUAL_DIRECTION.md §7):
+        // a 4-column desktop grid where every 3rd project is a wider, taller
+        // "feature" tile (2 cols) and the rest are standard (1 col) — 2+1+1
+        // fills a full row every three projects, so the rhythm repeats cleanly
+        // for any list length rather than requiring a fixed project count.
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {filtered.map((project, i) => {
+            const isFeature = i % 3 === 0;
+            return (
+              <div key={project.slug} className={isFeature ? "sm:col-span-2 lg:col-span-2" : ""}>
+                <ProjectCard
+                  project={project}
+                  priority={i < 3}
+                  size={isFeature ? "feature" : "standard"}
+                />
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
