@@ -46,10 +46,15 @@ export const ROLE_STYLE: Record<
   LayerRole,
   { order: number; strokeWidth: number; opacity: number; useGold?: boolean }
 > = {
-  axis: { order: 0, strokeWidth: 1, opacity: 0.14 },
-  primary: { order: 1, strokeWidth: 1.6, opacity: 1 },
-  secondary: { order: 2, strokeWidth: 1.1, opacity: 0.6 },
-  site: { order: 3, strokeWidth: 1, opacity: 0.45 },
-  annotation: { order: 4, strokeWidth: 1, opacity: 0.5 },
-  accent: { order: 5, strokeWidth: 1.75, opacity: 1, useGold: true },
+  // Softened from pure ink-black: the primary geometry should read as a
+  // confident pencil line, not a bold graphic shape, so it never competes
+  // with the gold accent for attention or with body copy for contrast.
+  axis: { order: 0, strokeWidth: 1, opacity: 0.1 },
+  primary: { order: 1, strokeWidth: 1.4, opacity: 0.8 },
+  secondary: { order: 2, strokeWidth: 1, opacity: 0.45 },
+  site: { order: 3, strokeWidth: 1, opacity: 0.35 },
+  annotation: { order: 4, strokeWidth: 1, opacity: 0.4 },
+  // The one line every scene resolves to — kept thin rather than heavy, so
+  // "confident" reads as precision, not boldness.
+  accent: { order: 5, strokeWidth: 1.4, opacity: 0.9, useGold: true },
 };

@@ -48,9 +48,9 @@ export function ProjectCard({ project, priority = false, size = "standard" }: Pr
             image is present. */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute top-0 right-0 w-12 h-12 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+          className="pointer-events-none absolute top-0 right-0 w-12 h-12 opacity-0 transition-opacity duration-300 group-hover:opacity-70 group-focus-visible:opacity-70"
         >
-          <ArchitecturalDrawing scene={cardAccentScene} viewBox="0 0 48 48" />
+          <ArchitecturalDrawing scene={cardAccentScene} viewBox="0 0 48 48" durationMs={600} />
         </div>
       </div>
       <div className={isFeature ? "p-6 md:p-8" : "p-5"}>

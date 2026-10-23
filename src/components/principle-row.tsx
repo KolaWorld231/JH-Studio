@@ -47,11 +47,11 @@ export function PrincipleRow({
         </p>
       </div>
       <div
-        className={`hidden lg:block w-36 h-28 shrink-0 transition-opacity duration-300 ${
-          emphasized ? "opacity-100" : "opacity-70"
+        className={`hidden lg:block w-36 h-28 shrink-0 transition-opacity duration-500 ${
+          emphasized ? "opacity-100" : "opacity-40"
         }`}
       >
-        <ArchitecturalDrawing scene={scene} highlighted={emphasized} />
+        <ArchitecturalDrawing scene={scene} highlighted={emphasized} showGrid={false} durationMs={900} />
       </div>
     </li>
   );

@@ -57,16 +57,29 @@ export function ProcessPrinciplePanel({ principles }: { principles: Principle[] 
 
       <div className="relative aspect-square w-full" aria-hidden="true">
         {/* The default process scene stays mounted and scroll-reactive; the
-            active principle scene overlays it on hover/focus so swapping
-            never interrupts the base scroll-progress animation underneath. */}
+            active principle scene crossfades over it on hover/focus (never a
+            hard cut) so swapping never interrupts the base scroll-progress
+            animation underneath, and resolves quickly (600ms, no grid)
+            rather than replaying the full cinematic draw on every hover. */}
         <div className="absolute inset-0">
           <ArchitecturalDrawing scene={processScene} mode="progress" />
         </div>
-        {activeScene ? (
-          <div className="absolute inset-0 bg-[var(--color-paper)]">
-            <ArchitecturalDrawing scene={activeScene} mode="reveal" highlighted />
-          </div>
-        ) : null}
+        <div
+          className={`absolute inset-0 bg-[var(--color-paper)] transition-opacity duration-[400ms] ${
+            activeScene ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          {activeScene ? (
+            <ArchitecturalDrawing
+              key={activeScene.id}
+              scene={activeScene}
+              mode="reveal"
+              highlighted
+              showGrid={false}
+              durationMs={600}
+            />
+          ) : null}
+        </div>
       </div>
     </section>
   );

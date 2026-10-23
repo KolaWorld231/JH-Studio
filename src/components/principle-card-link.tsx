@@ -27,10 +27,10 @@ export function PrincipleCardLink({ principle, delayMs = 0 }: { principle: Princ
         <div
           aria-hidden="true"
           className={`absolute -right-4 -top-2 w-24 h-20 transition-opacity duration-300 ${
-            hovered ? "opacity-100" : "opacity-0"
+            hovered ? "opacity-60" : "opacity-0"
           }`}
         >
-          <ArchitecturalDrawing scene={scene} mode="reveal" highlighted={hovered} />
+          <ArchitecturalDrawing scene={scene} mode="reveal" highlighted={hovered} showGrid={false} durationMs={700} />
         </div>
       ) : null}
       <span className="relative font-display text-2xl text-[var(--color-gold-dim)]">

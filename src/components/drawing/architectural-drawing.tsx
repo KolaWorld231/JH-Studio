@@ -28,6 +28,17 @@ type ArchitecturalDrawingProps = {
   decorative?: boolean;
   /** Show the scene's optional reference caption (e.g. "FIG. 01 — STUDY"). */
   showCaption?: boolean;
+  /** Hide the reference-grid (axis role) layer. Full hero-scale scenes read
+   *  the grid as architectural context; at icon/thumbnail scale (a 140px
+   *  principle-row diagram, a 48px card accent) five crossing grid lines
+   *  compress into visual noise rather than a drafting field — turn it off
+   *  for those. Defaults to true (shown) to match prior behavior. */
+  showGrid?: boolean;
+  /** Override the reveal-mode draw duration (ms). Small decorative
+   *  placements (card accents, inline mini-diagrams) read better with a
+   *  quicker, crisper draw than the ~1.9s cinematic duration used for
+   *  full-size hero moments. Only applies in "reveal" mode. */
+  durationMs?: number;
 };
 
 function pathKey(layerId: string, path: DrawingPath, i: number) {
@@ -46,6 +57,8 @@ export function ArchitecturalDrawing({
   highlighted = false,
   decorative = true,
   showCaption = false,
+  showGrid = true,
+  durationMs,
 }: ArchitecturalDrawingProps) {
   const revealState = useReveal<SVGSVGElement>(0.2);
   const progressState = useScrollProgress<SVGSVGElement>(0.25);
@@ -73,6 +86,7 @@ export function ArchitecturalDrawing({
       aria-label={decorative ? undefined : scene.label}
     >
       {scene.layers.map((layer) => {
+        if (layer.role === "axis" && !showGrid) return null;
         const roleStyle = ROLE_STYLE[layer.role];
         const order = ROLE_ORDER.indexOf(layer.role);
         const layerStart = order / ROLE_ORDER.length;
@@ -87,7 +101,14 @@ export function ArchitecturalDrawing({
         const emphasis = roleStyle.useGold && highlighted;
         const baseOpacity = emphasis ? Math.min(1, roleStyle.opacity * 1.2) : roleStyle.opacity;
         const strokeWidth = emphasis ? roleStyle.strokeWidth + 0.5 : roleStyle.strokeWidth;
-        const revealDelayMs = order * 140 + (layer.delayMs ?? 0);
+        // Stagger delays are tuned for the default ~1.9s cinematic duration;
+        // scale them down proportionally for a shortened durationMs so a
+        // quick decorative draw doesn't keep a disproportionately long pause
+        // before it starts.
+        const delayScale = durationMs !== undefined ? durationMs / 1900 : 1;
+        const revealDelayMs = Math.round((order * 140 + (layer.delayMs ?? 0)) * delayScale);
+
+        const duration = durationMs !== undefined ? `${durationMs}ms` : "var(--duration-line)";
 
         const children: ReactNode[] = layer.paths.map((path, i) => {
           const hasDash = Boolean(path.dash);
@@ -98,7 +119,7 @@ export function ArchitecturalDrawing({
                 opacity: revealFraction,
                 transition:
                   mode === "reveal"
-                    ? `opacity var(--duration-line) var(--ease-architectural) ${revealDelayMs}ms`
+                    ? `opacity ${duration} var(--ease-architectural) ${revealDelayMs}ms`
                     : "opacity 160ms linear",
               }
             : {
@@ -106,7 +127,7 @@ export function ArchitecturalDrawing({
                 strokeDashoffset: 1 - revealFraction,
                 transition:
                   mode === "reveal"
-                    ? `stroke-dashoffset var(--duration-line) var(--ease-architectural) ${revealDelayMs}ms`
+                    ? `stroke-dashoffset ${duration} var(--ease-architectural) ${revealDelayMs}ms`
                     : "stroke-dashoffset 160ms linear",
               };
 
