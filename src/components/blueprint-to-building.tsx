@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import { AppImage } from "@/components/app-image";
 import { useReveal, usePrefersReducedMotion } from "@/lib/hooks/use-reveal";
 import type { ProjectImage } from "@/lib/content/projects";
 
@@ -49,7 +49,7 @@ export function BlueprintToBuilding({
   return (
     <div ref={ref}>
       <div className="relative aspect-[16/10] w-full bg-[var(--color-surface)] overflow-hidden">
-        <Image
+        <AppImage
           src={drawing.src}
           alt={drawing.alt}
           fill
@@ -58,7 +58,7 @@ export function BlueprintToBuilding({
           style={{ opacity: mode === "drawing" ? 1 : 0 }}
           priority
         />
-        <Image
+        <AppImage
           src={rendering.src}
           alt={rendering.alt}
           fill

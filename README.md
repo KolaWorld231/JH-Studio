@@ -11,6 +11,36 @@ npm run build   # production build
 npm run lint
 ```
 
+## Hosting
+
+**GitHub Pages** (`.github/workflows/deploy-pages.yml`): builds and deploys
+automatically on every push to `main` (plus, temporarily, this PR's branch
+for preview — remove that branch from the workflow's trigger list once
+merged). The site will be live at
+`https://<owner>.github.io/JH-Studio/`. One manual step first: in the
+repo's **Settings → Pages**, set **Source** to **GitHub Actions** — the
+workflow can't flip that switch itself.
+
+This uses Next.js static export (`output: "export"`, only enabled when the
+workflow sets `GITHUB_PAGES=true`— a normal `npm run build` is unaffected).
+A few things that only matter for that path:
+- `src/lib/base-path.ts` / `src/components/app-image.tsx`: GitHub Pages
+  serves the site at a subpath, and `next/image` doesn't auto-prefix local
+  `src` strings when `images.unoptimized` is set (confirmed against a real
+  build) — every local-path `<Image>` usage goes through `AppImage` instead,
+  which applies the prefix.
+- `robots.ts` / `sitemap.ts` / `opengraph-image.tsx` have
+  `export const dynamic = "force-static"`, required by static export for
+  routes with no dynamic input.
+- The project-detail `[slug]` route generates one placeholder static path
+  when `projects` is empty, since static export requires at least one
+  generated path for a dynamic route — it resolves to the ordinary
+  not-found page, not a fabricated project.
+
+**Alternative**: Vercel supports this app natively (no static-export
+constraints, real image optimization, automatic PR preview URLs) if
+preferred over Pages.
+
 ## Structure
 
 - `src/app/page.tsx` — JH Studio parent homepage (division selector).

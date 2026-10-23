@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { AppImage } from "@/components/app-image";
 
 export function Logo({ tone = "ink" }: { tone?: "ink" | "paper" }) {
   const markSrc =
@@ -11,7 +11,7 @@ export function Logo({ tone = "ink" }: { tone?: "ink" | "paper" }) {
       className="flex items-center gap-2.5 shrink-0 group"
       aria-label="JH Studio Design & Development — home"
     >
-      <Image
+      <AppImage
         src={markSrc}
         alt="JH Studio knitted mark"
         width={32}

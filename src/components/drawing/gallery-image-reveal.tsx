@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { AppImage } from "@/components/app-image";
 import { useReveal } from "@/lib/hooks/use-reveal";
 
 /**
@@ -27,7 +27,7 @@ export function GalleryImageReveal({
         className="absolute inset-0 transition-[clip-path] duration-[1400ms] ease-[var(--ease-architectural)]"
         style={{ clipPath: isVisible ? "inset(0 0 0 0)" : "inset(0 100% 0 0)" }}
       >
-        <Image src={src} alt={alt} fill sizes={sizes} className="object-cover" />
+        <AppImage src={src} alt={alt} fill sizes={sizes} className="object-cover" />
       </div>
       <div
         aria-hidden="true"

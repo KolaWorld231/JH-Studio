@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { AppImage } from "@/components/app-image";
 import { ArchitecturalDrawing } from "@/components/drawing/architectural-drawing";
 import { cardAccentScene } from "@/lib/drawing/scenes";
 import type { Project } from "@/lib/content/projects";
@@ -26,7 +26,7 @@ export function ProjectCard({ project, priority = false, size = "standard" }: Pr
         }`}
       >
         {project.coverImage ? (
-          <Image
+          <AppImage
             src={project.coverImage.src}
             alt={project.coverImage.alt}
             fill

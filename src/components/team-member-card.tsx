@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { AppImage } from "@/components/app-image";
 import type { TeamMember } from "@/lib/content/team";
 
 export function TeamMemberCard({ member }: { member: TeamMember }) {
@@ -6,7 +6,7 @@ export function TeamMemberCard({ member }: { member: TeamMember }) {
     <div className="border border-[var(--color-border)] bg-[var(--color-paper)]">
       <div className="relative aspect-[4/5] bg-[var(--color-surface)]">
         {member.portrait ? (
-          <Image
+          <AppImage
             src={member.portrait}
             alt={member.name}
             fill

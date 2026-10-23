@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -9,10 +8,21 @@ import {
 } from "@/lib/content/projects";
 import { Reveal } from "@/components/reveal";
 import { ProjectCard } from "@/components/project-card";
+import { AppImage } from "@/components/app-image";
 import { BlueprintToBuilding } from "@/components/blueprint-to-building";
 import { GalleryImageReveal } from "@/components/drawing/gallery-image-reveal";
 
 export function generateStaticParams() {
+  if (projects.length === 0) {
+    // `output: "export"` (static hosting, e.g. GitHub Pages) requires at
+    // least one generated path for a dynamic route. This placeholder slug
+    // matches no real project, so getProjectBySlug() below returns
+    // undefined and the page renders as the standard not-found page — it's
+    // not a fabricated project, just a build-time placeholder. Remove this
+    // branch's relevance once real projects exist (it naturally stops
+    // being used as soon as `projects` is non-empty).
+    return [{ slug: "_placeholder" }];
+  }
   return projects.map((project) => ({ slug: project.slug }));
 }
 
@@ -90,7 +100,7 @@ export default async function ProjectDetailPage({
       ) : project.coverImage ? (
         <div className="container-edge py-10 md:py-14">
           <div className="relative aspect-[16/9] w-full bg-[var(--color-surface)]">
-            <Image
+            <AppImage
               src={project.coverImage.src}
               alt={project.coverImage.alt}
               fill

@@ -3,6 +3,10 @@ import path from "node:path";
 import { ImageResponse } from "next/og";
 
 export const runtime = "nodejs";
+// Required for `output: "export"` (static hosting, e.g. GitHub Pages) —
+// this image has no dynamic input, so it's always statically renderable
+// into a single PNG at build time.
+export const dynamic = "force-static";
 export const alt = "JH Studio Design & Development — Architecture that connects.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
