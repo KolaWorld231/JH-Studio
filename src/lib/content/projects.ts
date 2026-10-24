@@ -36,6 +36,30 @@ export type Project = {
     drawing: ProjectImage;
     rendering: ProjectImage;
   };
+  /**
+   * Focused annotations explaining specific design decisions, positioned
+   * over `coverImage` by percentage coordinates (0-100). Optional — only
+   * set once a project has real drawings worth annotating.
+   */
+  hotspots?: { x: number; y: number; label: string; body: string }[];
+  /**
+   * Named plan/section/elevation/model views for the layer-control toggle.
+   * Optional — only set when a project has more than one real drawing
+   * layer worth switching between.
+   */
+  layers?: { id: string; label: string; image: ProjectImage }[];
+  /**
+   * The matched-viewpoint plan-to-photo transition: two anchor points per
+   * image (percentage coordinates within each image's own box) defining
+   * genuine geometric correspondence, never a generic crossfade. Only set
+   * when `drawing` and `photo` are verified to depict the same viewpoint —
+   * same never-auto-matched rule as `blueprintToBuilding`.
+   */
+  matchedViewpoint?: {
+    drawing: ProjectImage;
+    photo: ProjectImage;
+    anchorPoints: { drawing: [[number, number], [number, number]]; photo: [[number, number], [number, number]] };
+  };
 };
 
 export const projectStatusLabels: Record<ProjectStatus, string> = {

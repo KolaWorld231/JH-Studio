@@ -11,6 +11,9 @@ import { ProjectCard } from "@/components/project-card";
 import { AppImage } from "@/components/app-image";
 import { BlueprintToBuilding } from "@/components/blueprint-to-building";
 import { ProjectGallery } from "@/components/project-gallery";
+import { DrawingHotspot } from "@/components/case-study/drawing-hotspot";
+import { LayerControl } from "@/components/case-study/layer-control";
+import { MatchedViewpointTransition } from "@/components/case-study/matched-viewpoint-transition";
 
 export function generateStaticParams() {
   if (projects.length === 0) {
@@ -108,10 +111,45 @@ export default async function ProjectDetailPage({
               className="object-cover"
               priority
             />
+            {project.hotspots && project.hotspots.length > 0
+              ? project.hotspots.map((hotspot) => <DrawingHotspot key={hotspot.label} hotspot={hotspot} />)
+              : null}
           </div>
           {project.coverImage.caption ? (
             <p className="mt-3 text-sm text-[var(--color-muted)]">{project.coverImage.caption}</p>
           ) : null}
+        </div>
+      ) : null}
+
+      {project.layers && project.layers.length > 0 ? (
+        <div className="container-edge py-10 md:py-14 border-t border-[var(--color-border)]">
+          <h2 className="text-xs uppercase tracking-[0.14em] text-[var(--color-muted)] mb-6">Drawing Layers</h2>
+          <LayerControl
+            layers={project.layers.map((layer) => ({
+              id: layer.id,
+              label: layer.label,
+              content: (
+                <div className="relative aspect-[16/9] w-full bg-[var(--color-surface)]">
+                  <AppImage src={layer.image.src} alt={layer.image.alt} fill sizes="100vw" className="object-cover" />
+                </div>
+              ),
+            }))}
+          />
+        </div>
+      ) : null}
+
+      {project.matchedViewpoint ? (
+        <div className="container-edge py-10 md:py-14 border-t border-[var(--color-border)]">
+          <Reveal className="mb-4 block">
+            <p className="text-xs uppercase tracking-[0.14em] text-[var(--color-gold-dim)]">
+              Drawing to Place
+            </p>
+          </Reveal>
+          <MatchedViewpointTransition
+            drawing={project.matchedViewpoint.drawing}
+            photo={project.matchedViewpoint.photo}
+            anchorPoints={project.matchedViewpoint.anchorPoints}
+          />
         </div>
       ) : null}
 
