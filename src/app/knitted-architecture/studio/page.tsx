@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/page-hero";
 import { EmptyState } from "@/components/empty-state";
-import { TeamMemberCard } from "@/components/team-member-card";
+import { StudioTable } from "@/components/studio-table";
 import { Reveal } from "@/components/reveal";
 import { team } from "@/lib/content/team";
 import { siteContent } from "@/lib/content/site";
@@ -33,13 +33,9 @@ export default function StudioPage() {
             />
           </Reveal>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {team.map((member, i) => (
-              <Reveal key={member.id} delayMs={i * 60}>
-                <TeamMemberCard member={member} />
-              </Reveal>
-            ))}
-          </div>
+          <Reveal>
+            <StudioTable team={team} />
+          </Reveal>
         )}
         </div>
       </section>
