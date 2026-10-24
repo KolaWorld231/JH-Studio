@@ -32,6 +32,8 @@ export function SchematicCornerBackdrop({
         scene={schematicCornerScene}
         viewBox="380 0 260 220"
         className="h-full w-full"
+        mode="progress"
+        ambient
         durationMs={1400}
       />
     </div>

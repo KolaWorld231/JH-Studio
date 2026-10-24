@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/page-hero";
 import { ProjectFilters } from "@/components/project-filters";
 import { projects } from "@/lib/content/projects";
+import { DrawingBackdrop } from "@/components/drawing/drawing-backdrop";
+import { urbanPerspectiveScene } from "@/lib/drawing/reference-scenes";
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -16,8 +18,11 @@ export default function ProjectsPage() {
         title="Projects"
         description="Each project is an editorial case study: a brief, a concept, and the drawings and imagery that explain how it connects people, place, and nature."
       />
-      <section className="container-edge py-16 md:py-20">
-        <ProjectFilters projects={projects} />
+      <section className="container-edge relative overflow-hidden py-16 md:py-20">
+        {projects.length === 0 ? <DrawingBackdrop scene={urbanPerspectiveScene} ambient /> : null}
+        <div className="relative z-10">
+          <ProjectFilters projects={projects} />
+        </div>
       </section>
     </>
   );

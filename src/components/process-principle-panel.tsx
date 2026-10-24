@@ -62,7 +62,7 @@ export function ProcessPrinciplePanel({ principles }: { principles: Principle[] 
             animation underneath, and resolves quickly (600ms, no grid)
             rather than replaying the full cinematic draw on every hover. */}
         <div className="absolute inset-0">
-          <ArchitecturalDrawing scene={processScene} mode="progress" />
+          <ArchitecturalDrawing scene={processScene} mode="progress" ambient />
         </div>
         <div
           className={`absolute inset-0 bg-[var(--color-paper)] transition-opacity duration-[400ms] ${

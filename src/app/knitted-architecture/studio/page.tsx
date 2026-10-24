@@ -5,6 +5,8 @@ import { TeamMemberCard } from "@/components/team-member-card";
 import { Reveal } from "@/components/reveal";
 import { team } from "@/lib/content/team";
 import { siteContent } from "@/lib/content/site";
+import { DrawingBackdrop } from "@/components/drawing/drawing-backdrop";
+import { roofStudyScene } from "@/lib/drawing/reference-scenes";
 
 export const metadata: Metadata = {
   title: "Studio",
@@ -20,7 +22,9 @@ export default function StudioPage() {
         description={siteContent.valueProposition}
       />
 
-      <section className="container-edge py-16 md:py-20">
+      <section className="container-edge relative overflow-hidden py-16 md:py-20">
+        {team.length === 0 ? <DrawingBackdrop scene={roofStudyScene} ambient /> : null}
+        <div className="relative z-10">
         {team.length === 0 ? (
           <Reveal>
             <EmptyState
@@ -37,6 +41,7 @@ export default function StudioPage() {
             ))}
           </div>
         )}
+        </div>
       </section>
     </>
   );

@@ -2,42 +2,25 @@
 
 import type { CSSProperties, ReactNode } from "react";
 import { useReveal } from "@/lib/hooks/use-reveal";
-import { useScrollProgress } from "@/lib/hooks/use-scroll-progress";
+import { useDrawingMotion } from "@/lib/hooks/use-drawing-motion";
 import { usePointerParallax } from "@/lib/hooks/use-pointer-parallax";
 import { ROLE_STYLE, type DrawingPath, type DrawingScene, type LayerRole } from "@/lib/drawing/types";
 
 type ArchitecturalDrawingProps = {
   scene: DrawingScene;
-  /** "reveal" = draws once when scrolled into view (cheap, default).
-   *  "progress" = continuously tied to how much of the drawing is in view —
-   *  lines extend further as you scroll in, and gently recede if you scroll
-   *  back out. Use for a small number of showcase moments, not every scene. */
+  /** Reveal once on entry, or scrub drawing progress directly with scroll. */
   mode?: "reveal" | "progress";
   tone?: "ink" | "paper";
   viewBox?: string;
   className?: string;
-  /** Lets secondary/annotation layers drift a few px toward the pointer on
-   *  desktop — disabled under reduced motion and on touch automatically. */
+  /** Very small pointer depth on secondary layers; desktop fine-pointer only. */
   interactive?: boolean;
-  /** External emphasis (e.g. a hovered/focused principle row driving its
-   *  own drawing) — boosts weight and accent width without re-triggering
-   *  the reveal animation. */
+  /** Slow, real-time movement of construction layers only. */
+  ambient?: boolean;
   highlighted?: boolean;
-  /** When the drawing conveys real information (not purely decorative),
-   *  pass false and the scene's label becomes its accessible name. */
   decorative?: boolean;
-  /** Show the scene's optional reference caption (e.g. "FIG. 01 — STUDY"). */
   showCaption?: boolean;
-  /** Hide the reference-grid (axis role) layer. Full hero-scale scenes read
-   *  the grid as architectural context; at icon/thumbnail scale (a 140px
-   *  principle-row diagram, a 48px card accent) five crossing grid lines
-   *  compress into visual noise rather than a drafting field — turn it off
-   *  for those. Defaults to true (shown) to match prior behavior. */
   showGrid?: boolean;
-  /** Override the reveal-mode draw duration (ms). Small decorative
-   *  placements (card accents, inline mini-diagrams) read better with a
-   *  quicker, crisper draw than the ~1.9s cinematic duration used for
-   *  full-size hero moments. Only applies in "reveal" mode. */
   durationMs?: number;
 };
 
@@ -54,33 +37,27 @@ export function ArchitecturalDrawing({
   viewBox = "0 0 640 480",
   className = "",
   interactive = false,
+  ambient = false,
   highlighted = false,
   decorative = true,
   showCaption = false,
   showGrid = true,
   durationMs,
 }: ArchitecturalDrawingProps) {
-  const revealState = useReveal<SVGSVGElement>(0.2);
-  const progressState = useScrollProgress<SVGSVGElement>(0.25);
-  // Pointer parallax tracks the wrapping <div>, not the <svg> itself, so it
-  // can own its own ref independently of the reveal/progress hook above —
-  // merging two hook-owned refs onto one DOM node isn't safe to do by
-  // mutating them in a shared callback ref.
+  const revealState = useReveal<HTMLDivElement>(0.2);
+  const motionRef = useDrawingMotion<HTMLDivElement>({ mode, ambient });
   const { ref: parallaxRef, offset } = usePointerParallax<HTMLDivElement>(5);
-
-  const svgRef = mode === "progress" ? progressState.ref : revealState.ref;
-  const isVisible = mode === "reveal" ? revealState.isVisible : true;
-  const progress = mode === "progress" ? progressState.progress : undefined;
+  const drawingRef = mode === "progress" ? motionRef : revealState.ref;
+  const isVisible = revealState.isVisible;
 
   const stroke = tone === "ink" ? "var(--color-ink)" : "var(--color-night-ink)";
   const gold = "var(--color-gold)";
 
   const svg = (
     <svg
-      ref={svgRef}
       viewBox={viewBox}
       fill="none"
-      className="w-full h-full"
+      className="h-full w-full"
       role={decorative ? undefined : "img"}
       aria-hidden={decorative ? "true" : undefined}
       aria-label={decorative ? undefined : scene.label}
@@ -90,46 +67,65 @@ export function ArchitecturalDrawing({
         const roleStyle = ROLE_STYLE[layer.role];
         const order = ROLE_ORDER.indexOf(layer.role);
         const layerStart = order / ROLE_ORDER.length;
-        const layerEnd = layerStart + 1 / ROLE_ORDER.length;
-        const layerProgress =
-          progress === undefined
-            ? undefined
-            : Math.max(0, Math.min(1, (progress - layerStart) / (layerEnd - layerStart)));
-
+        const layerSpan = 1 / ROLE_ORDER.length;
         const isParallaxLayer = interactive && (layer.role === "site" || layer.role === "annotation");
+        const isAmbientLayer = ambient && (layer.role === "axis" || layer.role === "site" || layer.role === "annotation");
         const color = roleStyle.useGold ? gold : stroke;
         const emphasis = roleStyle.useGold && highlighted;
         const baseOpacity = emphasis ? Math.min(1, roleStyle.opacity * 1.2) : roleStyle.opacity;
         const strokeWidth = emphasis ? roleStyle.strokeWidth + 0.5 : roleStyle.strokeWidth;
-        // Stagger delays are tuned for the default ~1.9s cinematic duration;
-        // scale them down proportionally for a shortened durationMs so a
-        // quick decorative draw doesn't keep a disproportionately long pause
-        // before it starts.
         const delayScale = durationMs !== undefined ? durationMs / 1900 : 1;
         const revealDelayMs = Math.round((order * 140 + (layer.delayMs ?? 0)) * delayScale);
-
         const duration = durationMs !== undefined ? `${durationMs}ms` : "var(--duration-line)";
+
+        const groupStyle = {
+          ...(mode === "progress"
+            ? {
+                "--layer-progress": `clamp(0, calc((var(--drawing-progress, 0) - ${layerStart}) / ${layerSpan}), 1)`,
+              }
+            : {}),
+        } as CSSProperties;
+        const transforms: string[] = [];
+        if (isParallaxLayer) transforms.push(`translate(${offset.x}px, ${offset.y}px)`);
+        if (isAmbientLayer) {
+          transforms.push(
+            layer.role === "annotation"
+              ? "translate(calc(var(--draft-x, 0px) * -0.45), calc(var(--draft-y, 0px) * -0.45))"
+              : "translate(var(--draft-x, 0px), var(--draft-y, 0px))",
+          );
+        }
+        if (transforms.length) {
+          groupStyle.transform = transforms.join(" ");
+          groupStyle.transition = isParallaxLayer && !ambient ? "transform 160ms ease-out" : undefined;
+        }
 
         const children: ReactNode[] = layer.paths.flatMap((path, i) => {
           const hasDash = Boolean(path.dash);
-          const revealFraction = mode === "reveal" ? (isVisible ? 1 : 0) : (layerProgress ?? 0);
+          const revealFraction = isVisible ? 1 : 0;
+          let style: CSSProperties;
 
-          const style: CSSProperties = hasDash
-            ? {
-                opacity: revealFraction,
-                transition:
-                  mode === "reveal"
-                    ? `opacity ${duration} var(--ease-architectural) ${revealDelayMs}ms`
-                    : "opacity 160ms linear",
-              }
-            : {
-                strokeDasharray: 1,
-                strokeDashoffset: 1 - revealFraction,
-                transition:
-                  mode === "reveal"
-                    ? `stroke-dashoffset ${duration} var(--ease-architectural) ${revealDelayMs}ms`
-                    : "stroke-dashoffset 160ms linear",
-              };
+          if (mode === "progress") {
+            style = hasDash
+              ? {
+                  opacity: "var(--layer-progress, 0)",
+                  strokeDashoffset: ambient && layer.role !== "primary" ? "var(--draft-dash, 0)" : 0,
+                }
+              : {
+                  strokeDasharray: 1,
+                  strokeDashoffset: "calc(1 - var(--layer-progress, 0))",
+                };
+          } else if (hasDash) {
+            style = {
+              opacity: revealFraction,
+              transition: `opacity ${duration} var(--ease-architectural) ${revealDelayMs}ms`,
+            };
+          } else {
+            style = {
+              strokeDasharray: 1,
+              strokeDashoffset: 1 - revealFraction,
+              transition: `stroke-dashoffset ${duration} var(--ease-architectural) ${revealDelayMs}ms`,
+            };
+          }
 
           const key = pathKey(layer.id, path, i);
           const elements: ReactNode[] = [];
@@ -167,14 +163,13 @@ export function ArchitecturalDrawing({
               />,
             );
           } else if (path.d) {
-            // A wash additionally fills the closed shape with the layer's
-            // color at a soft, fixed alpha, fading in alongside the stroke
-            // (which still draws progressively like any other line) rather
-            // than appearing as a flat shape instantly.
             const washStyle: CSSProperties = path.wash
               ? {
                   ...style,
-                  transition: `${style.transition}, fill-opacity ${duration} var(--ease-architectural) ${revealDelayMs}ms`,
+                  transition:
+                    mode === "reveal"
+                      ? `${style.transition}, fill-opacity ${duration} var(--ease-architectural) ${revealDelayMs}ms`
+                      : undefined,
                 }
               : style;
             elements.push(
@@ -182,7 +177,7 @@ export function ArchitecturalDrawing({
                 key={key}
                 d={path.d}
                 fill={path.wash ? color : "none"}
-                fillOpacity={path.wash ? revealFraction * 0.1 : undefined}
+                fillOpacity={path.wash ? (mode === "progress" ? "calc(var(--layer-progress, 0) * 0.1)" : revealFraction * 0.1) : undefined}
                 stroke={color}
                 strokeWidth={strokeWidth}
                 strokeOpacity={baseOpacity}
@@ -205,11 +200,11 @@ export function ArchitecturalDrawing({
                 fontFamily="var(--font-body)"
                 textAnchor="middle"
                 style={{
-                  opacity: revealFraction,
+                  opacity: mode === "progress" ? "var(--layer-progress, 0)" : revealFraction,
                   transition:
                     mode === "reveal"
                       ? `opacity ${duration} var(--ease-architectural) ${revealDelayMs}ms`
-                      : "opacity 160ms linear",
+                      : undefined,
                 }}
               >
                 {path.label.text}
@@ -221,14 +216,7 @@ export function ArchitecturalDrawing({
         });
 
         return (
-          <g
-            key={layer.id}
-            style={
-              isParallaxLayer
-                ? { transform: `translate(${offset.x}px, ${offset.y}px)`, transition: "transform 160ms ease-out" }
-                : undefined
-            }
-          >
+          <g key={layer.id} style={groupStyle}>
             {children}
           </g>
         );
@@ -238,11 +226,16 @@ export function ArchitecturalDrawing({
           x={scene.caption.x}
           y={scene.caption.y}
           fill={stroke}
-          opacity={0.35 * (mode === "reveal" ? (isVisible ? 1 : 0) : (progress ?? 0))}
           fontSize="11"
           letterSpacing="0.08em"
           fontFamily="var(--font-body)"
-          style={{ transition: "opacity 900ms var(--ease-architectural) 900ms" }}
+          style={{
+            opacity:
+              mode === "progress"
+                ? "calc(0.35 * var(--drawing-progress, 0))"
+                : 0.35 * (isVisible ? 1 : 0),
+            transition: mode === "reveal" ? "opacity 900ms var(--ease-architectural) 900ms" : undefined,
+          }}
         >
           {scene.caption.text}
         </text>
@@ -250,13 +243,20 @@ export function ArchitecturalDrawing({
     </svg>
   );
 
-  if (!interactive) {
-    return <div className={className}>{svg}</div>;
-  }
+  const drawing = (
+    <div
+      ref={drawingRef}
+      className={interactive ? "h-full w-full" : className}
+      style={{ "--drawing-progress": mode === "progress" ? 0 : 1 } as CSSProperties}
+    >
+      {svg}
+    </div>
+  );
 
+  if (!interactive) return drawing;
   return (
     <div ref={parallaxRef} className={className}>
-      {svg}
+      {drawing}
     </div>
   );
 }

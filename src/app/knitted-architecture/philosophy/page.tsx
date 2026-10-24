@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/page-hero";
 import { Reveal } from "@/components/reveal";
-import { ArchitecturalLines } from "@/components/architectural-lines";
+import { ArchitecturalDrawing } from "@/components/drawing/architectural-drawing";
+import { urbanPerspectiveScene } from "@/lib/drawing/reference-scenes";
 import { PrincipleRow } from "@/components/principle-row";
 import { siteContent } from "@/lib/content/site";
 import { principles } from "@/lib/content/principles";
@@ -32,7 +33,14 @@ export default function PhilosophyPage() {
           </p>
         </Reveal>
         <div className="relative aspect-square w-full hidden lg:block" aria-hidden="true">
-          <ArchitecturalLines variant="panel" className="w-full h-full" />
+          <ArchitecturalDrawing
+            scene={urbanPerspectiveScene}
+            mode="progress"
+            ambient
+            showCaption
+            showGrid={false}
+            className="h-full w-full"
+          />
         </div>
       </section>
 

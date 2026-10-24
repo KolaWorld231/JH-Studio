@@ -84,7 +84,7 @@ export default function ContactPage() {
 
       <div className="container-edge pb-16 md:pb-20">
         <div className="relative aspect-[3/1] w-full max-w-2xl mx-auto opacity-80">
-          <ArchitecturalDrawing scene={contactScene} />
+          <ArchitecturalDrawing scene={contactScene} mode="progress" ambient />
         </div>
       </div>
     </>

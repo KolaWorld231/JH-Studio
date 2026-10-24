@@ -28,7 +28,13 @@ export default function ProcessPage() {
           not competing with any heading or paragraph. */}
       <section className="container-edge py-16 md:py-20">
         <Reveal className="mx-auto max-w-2xl aspect-[4/3]">
-          <ArchitecturalDrawing scene={processPerspectiveScene} showCaption className="w-full h-full" />
+          <ArchitecturalDrawing
+            scene={processPerspectiveScene}
+            mode="progress"
+            ambient
+            showCaption
+            className="h-full w-full"
+          />
         </Reveal>
       </section>
 

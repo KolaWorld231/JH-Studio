@@ -9,6 +9,8 @@ import { principles } from "@/lib/content/principles";
 import { projects } from "@/lib/content/projects";
 import { ProjectCard } from "@/components/project-card";
 import { EmptyState } from "@/components/empty-state";
+import { DrawingBackdrop } from "@/components/drawing/drawing-backdrop";
+import { roofStudyScene } from "@/lib/drawing/reference-scenes";
 
 export const metadata: Metadata = {
   title: "Knitted Architecture",
@@ -52,6 +54,7 @@ export default function KnittedArchitecturePage() {
             <ArchitecturalDrawing
               scene={kaHeroScene}
               mode="progress"
+              ambient
               interactive
               showCaption
               className="w-full h-full"
@@ -61,7 +64,9 @@ export default function KnittedArchitecturePage() {
       </section>
 
       {/* Five principles, condensed */}
-      <section className="container-edge py-20 md:py-28">
+      <section className="container-edge relative overflow-hidden py-20 md:py-28">
+        <DrawingBackdrop scene={roofStudyScene} ambient />
+        <div className="relative z-10">
         <Reveal className="max-w-2xl">
           <p className="text-xs uppercase tracking-[0.16em] text-[var(--color-gold-dim)]">
             Five Principles
@@ -92,6 +97,7 @@ export default function KnittedArchitecturePage() {
           >
             Read the full philosophy →
           </Link>
+        </div>
         </div>
       </section>
 
