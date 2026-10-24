@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/page-hero";
 import { Reveal } from "@/components/reveal";
 import { EmptyState } from "@/components/empty-state";
-import { ArchitecturalDrawing } from "@/components/drawing/architectural-drawing";
-import { contactScene } from "@/lib/drawing/scenes";
+import { BriefComposer } from "@/components/brief-composer";
 import { contactDetails } from "@/lib/content/site";
+import { principles } from "@/lib/content/principles";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -15,7 +15,6 @@ export default function ContactPage() {
   const hasContact = Boolean(
     contactDetails.email || contactDetails.phone || contactDetails.location,
   );
-  const hasForm = Boolean(contactDetails.formEndpoint);
 
   return (
     <>
@@ -71,22 +70,19 @@ export default function ContactPage() {
           </Reveal>
         )}
 
-        {!hasForm ? (
-          <Reveal delayMs={80} className="mt-6">
-            <p className="text-sm leading-relaxed text-[var(--color-muted)]">
-              This page is ready for an inquiry form — it needs a real
-              submission destination connected before it goes live, so no
-              non-functional form is shown here in the meantime.
-            </p>
-          </Reveal>
-        ) : null}
       </section>
 
-      <div className="container-edge pb-16 md:pb-20">
-        <div className="relative aspect-[3/1] w-full max-w-2xl mx-auto opacity-80">
-          <ArchitecturalDrawing scene={contactScene} mode="progress" ambient />
-        </div>
-      </div>
+      <section className="container-edge pb-16 md:pb-20">
+        <Reveal>
+          <p className="text-xs uppercase tracking-[0.16em] text-[var(--color-gold-dim)]">Start here</p>
+          <h2 className="mt-3 font-display text-2xl md:text-3xl text-[var(--color-ink)] max-w-2xl">
+            Tell us about your project — your selections assemble the brief below.
+          </h2>
+        </Reveal>
+        <Reveal delayMs={80} className="mt-10">
+          <BriefComposer principles={principles} email={contactDetails.email} />
+        </Reveal>
+      </section>
     </>
   );
 }
