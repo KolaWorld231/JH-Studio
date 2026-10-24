@@ -55,6 +55,6 @@ export const contactDetails: {
   formEndpoint?: string;
 } = {};
 
-// Approved social links have not been supplied yet. Add entries here (e.g.
-// { label: "Instagram", href: "https://instagram.com/..." }) once approved.
-export const socialLinks: { label: string; href: string }[] = [];
+export const socialLinks: { label: string; href: string }[] = [
+  { label: "Facebook", href: "https://web.facebook.com/profile.php?id=100077462935437" },
+];
