@@ -1,10 +1,12 @@
 import { AppImage } from "@/components/app-image";
+import { ArchitecturalDrawing } from "@/components/drawing/architectural-drawing";
+import { cardAccentScene } from "@/lib/drawing/scenes";
 import type { TeamMember } from "@/lib/content/team";
 
 export function TeamMemberCard({ member }: { member: TeamMember }) {
   return (
-    <div className="border border-[var(--color-border)] bg-[var(--color-paper)]">
-      <div className="relative aspect-[4/5] bg-[var(--color-surface)]">
+    <div className="group border border-[var(--color-border)] bg-[var(--color-paper)] transition-colors hover:border-[var(--color-gold)]">
+      <div className="relative aspect-[4/5] bg-[var(--color-surface)] overflow-hidden">
         {member.portrait ? (
           <AppImage
             src={member.portrait}
@@ -18,6 +20,14 @@ export function TeamMemberCard({ member }: { member: TeamMember }) {
             Portrait pending
           </div>
         )}
+        {/* Same quiet corner accent used on project cards, kept consistent
+            across the site rather than invented separately per component. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-0 right-0 h-12 w-12 opacity-0 transition-opacity duration-300 group-hover:opacity-70 group-focus-within:opacity-70"
+        >
+          <ArchitecturalDrawing scene={cardAccentScene} viewBox="0 0 48 48" durationMs={600} />
+        </div>
       </div>
       <div className="p-5">
         <h3 className="font-display text-lg text-[var(--color-ink)]">{member.name}</h3>
