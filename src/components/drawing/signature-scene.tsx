@@ -204,7 +204,6 @@ export function SignatureScene() {
               style={{
                 transform: "perspective(1400px) rotateX(var(--rot-y)) rotateY(var(--rot-x))",
                 transition: "transform 200ms ease-out",
-                transformStyle: "preserve-3d",
               }}
             >
               {scenes.map((scene, i) => (
@@ -217,7 +216,6 @@ export function SignatureScene() {
                     scene={scene}
                     mode="reveal"
                     ambient
-                    interactive
                     showCaption
                     className="w-full h-full"
                   />
