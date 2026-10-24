@@ -14,9 +14,7 @@ npm run lint
 ## Hosting
 
 **GitHub Pages** (`.github/workflows/deploy-pages.yml`): builds and deploys
-automatically on every push to `main` (plus, temporarily, this PR's branch
-for preview — remove that branch from the workflow's trigger list once
-merged). The site will be live at
+automatically on every push to `main`. The site is live at
 `https://<owner>.github.io/JH-Studio/`. One manual step first: in the
 repo's **Settings → Pages**, set **Source** to **GitHub Actions** — the
 workflow can't flip that switch itself.
