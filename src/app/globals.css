@@ -32,9 +32,13 @@
 
   --font-display: var(--font-fraunces), "Iowan Old Style", "Palatino Linotype", Georgia, serif;
   --font-body: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* A third, narrowly-scoped register for drawing annotations and small
+     technical labels only — never swapped in for --font-display/--font-body. */
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
 
   --space-section: clamp(4rem, 8vw, 8rem);
   --container-max: 88rem;
+  --grid-gutter: clamp(1rem, 2.5vw, 2rem);
 
   --ease-architectural: cubic-bezier(0.22, 0.61, 0.17, 1);
   --duration-line: 1900ms;
@@ -57,6 +61,7 @@
   --color-night-muted: var(--color-night-muted);
   --font-display: var(--font-display);
   --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
 }
 
 * {
@@ -172,4 +177,49 @@ body {
   max-width: var(--container-max);
   margin-inline: auto;
   padding-inline: clamp(1.25rem, 4vw, 3.5rem);
+}
+
+/* Editorial layout primitives ----------------------------------------
+   New for the "From Line to Life" redesign. Additive only — existing ad
+   hoc grid-cols-* usages elsewhere are untouched. Single-column below sm
+   (where a 12-col grid is unusable for text), full 12-col from lg+, same
+   mobile-first approach every other page already follows. */
+.grid-editorial {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: var(--grid-gutter);
+  padding-inline: clamp(1.25rem, 4vw, 3.5rem);
+}
+
+@media (min-width: 64rem) {
+  .grid-editorial {
+    grid-template-columns: repeat(12, 1fr);
+  }
+}
+
+/* A full-bleed dark "drawing room" section — codifies the pattern already
+   used ad hoc on the parent homepage's dark division card and the Real
+   Estate Development page into one reusable class. */
+.drawing-room {
+  background: var(--color-night);
+  color: var(--color-night-ink);
+}
+
+/* Monospaced drawing-annotation register — labels, coordinates, drawing
+   indices only. Never used for headings or body copy. */
+.annotation-text {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.6875rem;
+}
+
+/* Codifies the established text-safety pattern (a contained column with a
+   mask fading any decorative layer behind it to transparent before it
+   reaches readable text) as one canonical utility instead of re-deriving
+   the gradient per page/component. Apply to the decorative layer itself,
+   not the text. */
+.text-safe-mask {
+  mask-image: linear-gradient(to right, transparent, black 38%, black 62%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 38%, black 62%, transparent);
 }

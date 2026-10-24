@@ -4,9 +4,9 @@ import { Reveal } from "@/components/reveal";
 import { ArchitecturalDrawing } from "@/components/drawing/architectural-drawing";
 import { urbanPerspectiveScene } from "@/lib/drawing/reference-scenes";
 import { PrincipleRow } from "@/components/principle-row";
+import { PhilosophyModel } from "@/components/philosophy-model";
 import { siteContent } from "@/lib/content/site";
 import { principles } from "@/lib/content/principles";
-import { principleScenes } from "@/lib/drawing/scenes";
 
 export const metadata: Metadata = {
   title: "Philosophy",
@@ -50,19 +50,24 @@ export default function PhilosophyPage() {
             <p className="text-xs uppercase tracking-[0.16em] text-[var(--color-gold-dim)]">
               The Five Principles
             </p>
+            <h2 className="mt-3 font-display text-2xl md:text-3xl text-[var(--color-ink)] max-w-2xl">
+              One model, reorganized by each principle — select one to see how it reshapes the same plan and
+              section.
+            </h2>
           </Reveal>
 
-          <ol className="mt-10 space-y-10">
-            {principles.map((principle, i) => (
-              <PrincipleRow
-                key={principle.id}
-                principle={principle}
-                scene={principleScenes[principle.id]}
-                delayMs={i * 70}
-              />
-            ))}
-          </ol>
+          <Reveal delayMs={80} className="mt-10">
+            <PhilosophyModel principles={principles} />
+          </Reveal>
         </div>
+      </section>
+
+      <section className="container-edge py-16 md:py-20">
+        <ol className="space-y-10">
+          {principles.map((principle, i) => (
+            <PrincipleRow key={principle.id} principle={principle} delayMs={i * 70} />
+          ))}
+        </ol>
       </section>
     </>
   );
