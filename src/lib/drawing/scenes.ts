@@ -387,6 +387,55 @@ export const processScene: DrawingScene = {
 };
 
 // ---------------------------------------------------------------------------
+// Process, street study — a one-point-perspective sketch (building massing,
+// a receding street, a site tree) in the hand-drafted construction-sketch
+// register the owner referenced, distinct from the plan/elevation register
+// used everywhere else. One composition, used once, in the Process closing
+// section — not a new sitewide drawing type.
+// ---------------------------------------------------------------------------
+export const processPerspectiveScene: DrawingScene = {
+  id: "process-perspective",
+  label: "One-point perspective sketch of a building massing along a receding street",
+  caption: { text: "FIG. 02 — SITE STUDY", x: 70, y: 430 },
+  layers: [
+    {
+      id: "ground",
+      role: "secondary",
+      paths: [{ line: [40, 400, 600, 400] }],
+    },
+    {
+      id: "building",
+      role: "primary",
+      paths: [{ d: "M70 400 L70 170 L230 170 L230 400" }],
+      delayMs: 120,
+    },
+    {
+      id: "perspective-lines",
+      role: "annotation",
+      paths: [
+        { line: [70, 170, 560, 230], dash: "2 7" },
+        { line: [230, 170, 560, 230], dash: "2 7" },
+        { line: [70, 400, 560, 230], dash: "2 7" },
+        { line: [230, 400, 560, 230], dash: "2 7" },
+      ],
+      delayMs: 300,
+    },
+    {
+      id: "site-tree",
+      role: "site",
+      paths: [{ circle: [480, 326, 15] }, { line: [480, 341, 480, 400] }],
+      delayMs: 440,
+    },
+    {
+      id: "vanishing-point",
+      role: "accent",
+      paths: [{ circle: [560, 230, 2.5] }],
+      delayMs: 560,
+    },
+  ],
+};
+
+// ---------------------------------------------------------------------------
 // Contact — a quiet closing composition: just a few lines resolving to a
 // single connective point. Deliberately sparse, no full grid.
 // ---------------------------------------------------------------------------

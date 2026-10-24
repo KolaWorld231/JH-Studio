@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/page-hero";
 import { Reveal } from "@/components/reveal";
 import { ProcessPrinciplePanel } from "@/components/process-principle-panel";
+import { ArchitecturalDrawing } from "@/components/drawing/architectural-drawing";
+import { processPerspectiveScene } from "@/lib/drawing/scenes";
 import { siteContent } from "@/lib/content/site";
 import { principles } from "@/lib/content/principles";
 
@@ -20,6 +22,15 @@ export default function ProcessPage() {
       />
 
       <ProcessPrinciplePanel principles={principles} />
+
+      {/* A dedicated visual breather between the principle panel and the
+          closing note — a contained drawing area with its own whitespace,
+          not competing with any heading or paragraph. */}
+      <section className="container-edge py-16 md:py-20">
+        <Reveal className="mx-auto max-w-2xl aspect-[4/3]">
+          <ArchitecturalDrawing scene={processPerspectiveScene} showCaption className="w-full h-full" />
+        </Reveal>
+      </section>
 
       <section className="container-edge pb-16 md:pb-24">
         <Reveal className="border border-dashed border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-12 text-center max-w-2xl mx-auto">

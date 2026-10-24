@@ -73,7 +73,15 @@ export default function KnittedArchitecturePage() {
 
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-px bg-[var(--color-border)] border border-[var(--color-border)]">
           {principles.map((principle, i) => (
-            <PrincipleCardLink key={principle.id} principle={principle} delayMs={i * 60} />
+            <PrincipleCardLink
+              key={principle.id}
+              principle={principle}
+              delayMs={i * 60}
+              // 5 items into a 2-column tablet grid leaves an empty, oddly
+              // bordered cell next to the last card — span it full-width at
+              // that breakpoint only; the 5-column desktop grid is unaffected.
+              className={i === principles.length - 1 ? "sm:col-span-2 lg:col-span-1" : ""}
+            />
           ))}
         </div>
 

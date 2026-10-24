@@ -7,7 +7,15 @@ import { useReveal } from "@/lib/hooks/use-reveal";
 import { principleScenes } from "@/lib/drawing/scenes";
 import type { Principle } from "@/lib/content/principles";
 
-export function PrincipleCardLink({ principle, delayMs = 0 }: { principle: Principle; delayMs?: number }) {
+export function PrincipleCardLink({
+  principle,
+  delayMs = 0,
+  className = "",
+}: {
+  principle: Principle;
+  delayMs?: number;
+  className?: string;
+}) {
   const { ref, isVisible } = useReveal<HTMLAnchorElement>(0.15);
   const [hovered, setHovered] = useState(false);
   const scene = principleScenes[principle.id];
@@ -21,7 +29,7 @@ export function PrincipleCardLink({ principle, delayMs = 0 }: { principle: Princ
       onMouseLeave={() => setHovered(false)}
       onFocus={() => setHovered(true)}
       onBlur={() => setHovered(false)}
-      className={`group relative overflow-hidden fade-rise ${isVisible ? "is-visible" : ""} bg-[var(--color-paper)] p-6 transition-colors hover:bg-[var(--color-surface)]`}
+      className={`group relative overflow-hidden fade-rise ${isVisible ? "is-visible" : ""} bg-[var(--color-paper)] p-6 transition-colors hover:bg-[var(--color-surface)] ${className}`}
     >
       {scene ? (
         <div
