@@ -10,7 +10,7 @@ import { Reveal } from "@/components/reveal";
 import { ProjectCard } from "@/components/project-card";
 import { AppImage } from "@/components/app-image";
 import { BlueprintToBuilding } from "@/components/blueprint-to-building";
-import { GalleryImageReveal } from "@/components/drawing/gallery-image-reveal";
+import { ProjectGallery } from "@/components/project-gallery";
 
 export function generateStaticParams() {
   if (projects.length === 0) {
@@ -141,16 +141,7 @@ export default async function ProjectDetailPage({
           <h2 className="text-xs uppercase tracking-[0.14em] text-[var(--color-muted)] mb-6">
             Drawings & Imagery
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {project.gallery.map((image, i) => (
-              <Reveal key={image.src} delayMs={i * 60}>
-                <GalleryImageReveal src={image.src} alt={image.alt} sizes="(min-width: 768px) 50vw, 100vw" />
-                {image.caption ? (
-                  <p className="mt-2 text-sm text-[var(--color-muted)]">{image.caption}</p>
-                ) : null}
-              </Reveal>
-            ))}
-          </div>
+          <ProjectGallery images={project.gallery} />
         </div>
       ) : null}
 
