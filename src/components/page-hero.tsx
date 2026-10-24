@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/reveal";
+import { SchematicCornerBackdrop } from "@/components/drawing/schematic-corner-backdrop";
 
 export function PageHero({
   eyebrow,
@@ -10,8 +11,9 @@ export function PageHero({
   description?: string;
 }) {
   return (
-    <div className="container-edge pt-16 pb-12 md:pt-24 md:pb-16 border-b border-[var(--color-border)]">
-      <Reveal>
+    <div className="relative overflow-hidden container-edge pt-16 pb-12 md:pt-24 md:pb-16 border-b border-[var(--color-border)]">
+      <SchematicCornerBackdrop />
+      <Reveal className="relative">
         {eyebrow ? (
           <p className="text-xs uppercase tracking-[0.16em] text-[var(--color-gold-dim)]">{eyebrow}</p>
         ) : null}

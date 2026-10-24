@@ -1,4 +1,4 @@
-import { angleMark, type DrawingLayer, type DrawingScene } from "./types";
+import { angleMark, hatchLines, type DrawingLayer, type DrawingScene } from "./types";
 
 /** Standard 5x5 alignment grid shared by every full-size scene. */
 function gridAxis(id = "grid"): DrawingLayer {
@@ -484,6 +484,62 @@ export const cardAccentScene: DrawingScene = {
       role: "accent",
       paths: [{ circle: [40, 40, 2.5] }],
       delayMs: 120,
+    },
+  ],
+};
+
+// ---------------------------------------------------------------------------
+// Schematic corner — a denser construction-document fragment (a roof-truss
+// corner, cross-braced, hatched, with a dimension and an angle callout),
+// meant to sit behind a page's opening section at low opacity, masked so it
+// concentrates in one corner and fades out before it ever reaches text. Not
+// a real structural detail — illustrative drafting texture only.
+// ---------------------------------------------------------------------------
+export const schematicCornerScene: DrawingScene = {
+  id: "schematic-corner",
+  label: "",
+  layers: [
+    {
+      id: "roof-outline",
+      role: "primary",
+      paths: [{ d: "M600 40 L420 180 L640 180" }, { d: "M420 180 L640 180" }],
+    },
+    {
+      id: "truss-members",
+      role: "secondary",
+      paths: [
+        { line: [600, 40, 510, 180] },
+        { line: [600, 40, 600, 180] },
+        { line: [600, 40, 640, 150] },
+      ],
+      delayMs: 160,
+    },
+    {
+      id: "hatch",
+      role: "annotation",
+      paths: hatchLines(430, 45, 170, 130, 11, 45),
+      delayMs: 280,
+    },
+    {
+      id: "dimension",
+      role: "annotation",
+      paths: [
+        { line: [420, 195, 510, 195], dash: "2 6" },
+        { d: "M420 195 L420 189", label: { text: "1.3 M", x: 465, y: 212, size: 9 } },
+      ],
+      delayMs: 360,
+    },
+    {
+      id: "apex-angle",
+      role: "annotation",
+      paths: [angleMark(600, 40, 22, 100, 170)],
+      delayMs: 420,
+    },
+    {
+      id: "joint-accent",
+      role: "accent",
+      paths: [{ circle: [600, 40, 2.5] }],
+      delayMs: 520,
     },
   ],
 };
