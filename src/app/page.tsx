@@ -2,6 +2,7 @@ import { SiteHeader } from "@/components/site-header";
 import { ArchitecturalLines } from "@/components/architectural-lines";
 import { DivisionCard } from "@/components/division-card";
 import { Reveal } from "@/components/reveal";
+import { SignatureScene } from "@/components/drawing/signature-scene";
 import { siteContent, divisions } from "@/lib/content/site";
 import type { Metadata } from "next";
 
@@ -119,6 +120,8 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        <SignatureScene />
       </main>
     </>
   );
