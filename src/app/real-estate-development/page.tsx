@@ -16,7 +16,7 @@ export default function RealEstateDevelopmentPage() {
   return (
     <>
       <SiteHeader divisionLabel="Real Estate Development" />
-      <main id="main-content" className="bg-[var(--color-night)] text-[var(--color-night-ink)] min-h-[70vh]">
+      <main id="main-content" className="drawing-room min-h-[70vh]">
         <div className="container-edge py-20 md:py-32 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <Reveal>
             <p className="text-xs uppercase tracking-[0.16em] text-[var(--color-gold)]">
